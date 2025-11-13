@@ -39,6 +39,8 @@ def loadImages(base_folder):
 
 
 def getData():
+
+    np.random.seed(12919)
     imgs = loadImages('Caltech_101')
 
     trainX = []
@@ -52,10 +54,14 @@ def getData():
         classMapping[_class] = classCounter
         classCounter += 1
         #15 images are testing, rest is training
-        testIndices = np.random.choise(len(imgs[_class]) , 15, replace=False)
+        testIndices = np.random.choice(len(imgs[_class]) , 15, replace=False).astype(int)
+        testIndices = testIndices.astype(int)
+
         trainIndices = list(set(range(len(imgs[_class]))) - set(testIndices))
-        test = imgs[_class][testIndices]
-        train = imgs[_class][trainIndices]
+        
+        test = [imgs[_class][i] for i in testIndices]
+        train = [imgs[_class][i] for i in trainIndices]
+
 
         trainX += train
         trainY += [classMapping[_class]] * len(train)
