@@ -6,21 +6,19 @@ from sklearn.cluster import KMeans
 
 class Codebook():
 
-    def __init__(self, trainImages, size):
+    def __init__(self, size):
         self.size = size
-        self.trainImages = trainImages
 
-    def fit(self):
+    def fit(self, trainImages, y=None):
+        #y is not needed but for compatibility I put it
         stime = time.time()
         #perform the kmeans clustering to find the centers of the       
         kmeans = KMeans(n_clusters = self.size, max_iter = 10000)
 
-        descriptors = SIFT.getDenseSIFT(self.trainImages)
-        #reset the train images to gain memory
-        self.trainImages = None
+        descriptors = SIFT.getDenseSIFT(trainImages)
 
         kmeans.fit(descriptors)
-        print('KMeans algorithm took ', time.time()-stime)
+        #print('KMeans algorithm took ', time.time()-stime)
 
         self.kmeans = kmeans
 

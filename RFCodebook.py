@@ -6,9 +6,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 class Codebook():
 
-    def __init__(self, trainImages, trainClasses):
-        self.trainImages = trainImages
-        self.trainClasses = trainClasses
+    def __init__(self, n_trees):
+        self.n_trees = n_trees
 
     def compute_tree_leaf_indices(self, tree):
         all_leaf_nodes = np.where(tree.tree_.children_left == -1)[0]
@@ -30,22 +29,21 @@ class Codebook():
         return mappings
 
 
-    def fit(self):
+    def fit(self, X, y):
         stime = time.time()
 
         forest = RandomForestClassifier(
             n_jobs= 14,
-            n_estimators = 50,
+            n_estimators = self.n_trees,
             max_depth= 20
 
                 )
 
-        descriptors, labels = SIFT.getDenseSIFTWithLabels(self.trainImages, self.trainClasses)
+        descriptors, labels = SIFT.getDenseSIFTWithLabels(X, y)
         #reset the train images to gain memory
-        self.trainImages = None
 
         forest.fit(descriptors, labels)
-        print('RF algorithm took ', time.time()-stime)
+        #print('RF algorithm took ', time.time()-stime)
 
         n_leaves = sum(estimator.get_n_leaves() for estimator in forest.estimators_)
 
