@@ -11,6 +11,7 @@ import RFCodebook
 
 
 
+
 def main():
 
     trainX, trainY, testX, testY , classMappings = utils.getData()    
@@ -19,7 +20,8 @@ def main():
     print(len(testX), " test images")
     print(classMappings)
 
-    kmeansCB = kMeansCB.Codebook(100)
+    #kmeansCB = kMeansCB.Codebook(500)
+    kmeansCB = RFCodebook.Codebook(40, 10000, 'log2')
     kmeansCB.fit(trainX, trainY)
 
     #plt.imshow(testX[0])
@@ -43,8 +45,8 @@ def main():
                                   max_samples=20,
                                  min_samples_split=5,
                                  max_features=400,
-                                 dp=DualPixelTree.DPabs,
-                                 commutative=True,
+                                 dp=DualPixelTree.DPWsub,
+                                 commutative=False,
                                   )
    
     #pred2Pixel = Classifier.Classifier(kmeansCB, trainX, trainY, twoPixel=True)   

@@ -11,6 +11,10 @@ def DPsub(col, Y):
     Y = (col[:,None] - Y)
     return Y
 
+def DPWsub(col, Y):
+    Y =  (col[:,None] - Y**2 )  
+    return Y
+
 
 class DPForest():
     def __init__(self, 
@@ -58,19 +62,20 @@ class DPForest():
             counter += toTake
 
         if(not self.commutative):
-            X = X.T
+            X = X[: , ::-1]
             for i in range(X.shape[1] ):
                 toTake = X.shape[1] - i - 1
+
                 if(toTake == 0):
                     break
             
                 f1 = X[:, i]
                 X_f = X[:, i+1:] 
 
-                X_f = dual_pixel_test_method(f1 ,X_f)
+                X_f = self.method(f1 ,X_f)
             
                 Y[: , counter:counter+toTake] = X_f
-            counter += toTake
+                counter += toTake
 
         return Y
 
